@@ -47,7 +47,24 @@ function extract(raw) {
             }
         })
     })
+    let blacklist = [
+        '记账日期',
+        '货币',
+        '交易金额',
+        '联机余额',
+        '交易摘要',
+        '对手信息',
+        'Date',
+        'Currency',
+        'Transaction',
+        'Amount',
+        'Balance',
+        'Transaction Type',
+        'Counter Party',
+    ]
     return texts
+        .filter(value => !blacklist.includes(value)) // 过滤掉每页的 Header
+        .filter(value => value.match(/\d*\/\d*/) == null) // 过滤掉页码: 8/12
 }
 
 function groupByTransaction(list) {
