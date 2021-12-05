@@ -13,15 +13,15 @@ exports.pdfParser = function () {
 
     pdfParser.on("pdfParser_dataError", errData => console.error(errData.parserError));
     pdfParser.on("pdfParser_dataReady", pdfData => {
-        var result = JSON.stringify(pdfData, null, 2);
-        result = decodeURIComponent(result)
         if (OUTPUT_TMP) {
+            var result = JSON.stringify(pdfData, null, 2);
+            result = decodeURIComponent(result)
             fs.writeFile('./sample/tmp.json', result.toString(), callback => {
             })
         }
-        result = extract(pdfData)
-        console.log(result);
-        fs.writeFile('./sample/result.json', result.join('\n'), callback => {
+        let extracted = extract(pdfData)
+        console.log(extracted);
+        fs.writeFile('./sample/result.json', extracted.join('\n'), callback => {
         })
     });
     pdfParser.loadPDF(TARGET_FILE)
