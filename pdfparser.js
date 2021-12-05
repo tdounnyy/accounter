@@ -1,4 +1,5 @@
 const fs = require("fs");
+const moment = require("moment");
 const OUTPUT_TMP = false
 const HEADER_ENDING = 'Counter Party'
 // const TARGET_FILE = "./sample/bank_test.pdf"
@@ -23,6 +24,8 @@ exports.pdfParser = function () {
         console.log(extracted);
         fs.writeFile('./sample/result.json', extracted.join('\n'), callback => {
         })
+
+        groupByTransaction(extracted)
     });
     pdfParser.loadPDF(TARGET_FILE)
 }
@@ -45,4 +48,17 @@ function extract(raw) {
         })
     })
     return texts
+}
+
+function groupByTransaction(list) {
+    let result = list.reduce((acc, current) => {
+            if (moment(current, "YYYY-MM-DD", true).isValid()) {
+                acc.push([current])
+            } else {
+                acc[acc.length - 1].push(current)
+            }
+            return acc
+        }, []
+    )
+    console.log(result)
 }
