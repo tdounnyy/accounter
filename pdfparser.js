@@ -10,15 +10,15 @@ exports.pdfParser = function () {
     pdfParser.on("pdfParser_dataReady", pdfData => {
         var result = JSON.stringify(pdfData, null, 2);
         result = decodeURIComponent(result)
-        fs.writeFile('tmp.json', result.toString(), callback => {
+        fs.writeFile('./sample/tmp.json', result.toString(), callback => {
             result = JSON.parse(result)
             result = extract(result)
             console.log(result);
-            fs.writeFile('result.json', result.toString(), callback => {
+            fs.writeFile('./sample/result.json', result.toString(), callback => {
             })
         })
     });
-    pdfParser.loadPDF("./bank_test.pdf");
+    pdfParser.loadPDF("./sample/bank_test.pdf");
 
     console.log('done')
 }
