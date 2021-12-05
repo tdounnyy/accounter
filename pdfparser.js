@@ -1,3 +1,4 @@
+const fs = require("fs");
 exports.pdfParser = function () {
     console.log('start')
     const fs = require('fs'),
@@ -9,11 +10,27 @@ exports.pdfParser = function () {
     pdfParser.on("pdfParser_dataReady", pdfData => {
         var result = JSON.stringify(pdfData, null, 2);
         result = decodeURIComponent(result)
-        console.log(result);
-        fs.writeFile('result.json', result.toString(), callback => { })
+        fs.writeFile('tmp.json', result.toString(), callback => {
+            result = JSON.parse(result)
+            result = extract(result)
+            console.log(result);
+            fs.writeFile('result.json', result.toString(), callback => {
+            })
+        })
     });
-
     pdfParser.loadPDF("./bank_test.pdf");
 
     console.log('done')
-};
+}
+
+function extract(raw) {
+    let pages = raw['pages']
+    var texts = []
+    for (page in pages) {
+        for (text in page) {
+            let t = text['R']['T']
+            texts.add(t)
+        }
+    }
+    return texts
+}
