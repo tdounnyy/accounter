@@ -1,6 +1,8 @@
-let parser = require('./pdfparser');
-parser.pdfParser()
+let pdfParser = require('./pdfparser');
+pdfParser.parse()
 
+let csvParser = require('./csvparser');
+csvParser.parse()
 // var http = require('http');
 // http.createServer(function (req, res) {
 //   res.writeHead(200, {'Content-Type': 'text/html'});

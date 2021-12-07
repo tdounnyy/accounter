@@ -11,7 +11,7 @@ const HEADER_ENDING = 'Counter Party'
 // const TARGET_FILE = "./sample/bank_test.pdf"
 const TARGET_FILE = "./sample/cmb.pdf"
 
-exports.pdfParser = function () {
+exports.parse = function () {
     console.log('start')
     const fs = require('fs'),
         PDFParser = require("pdf2json");
