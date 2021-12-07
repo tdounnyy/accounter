@@ -1,5 +1,5 @@
 let pdfParser = require('./pdfparser');
-pdfParser.parse()
+// pdfParser.parse()
 
 let csvParser = require('./csvparser');
 csvParser.parse()
