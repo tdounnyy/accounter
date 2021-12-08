@@ -26,6 +26,7 @@ export function parse() {
     });
 
     let reachHeader = false
+    let result = []
     lineReader.on('line', function (line) {
         if (reachHeader) {
             let s = line.split(",")
@@ -38,6 +39,8 @@ export function parse() {
                 s[2]
             )
             console.log(t)
+            // TODO: 2021/12/9 (duanyufei) async function
+            result.push(t)
         } else if (line.startsWith(HEADER[0])) {
             reachHeader = true
         }
