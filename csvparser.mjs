@@ -1,6 +1,5 @@
 import {Transaction} from "./classes.mjs"
-import readline from 'readline'
-import fs from 'fs'
+import {promises as fs} from 'fs'
 
 const INPUT_FILE = './sample/wc.csv'
 
@@ -18,31 +17,35 @@ let HEADER = [
     "备注"
 ]
 
-export function parse() {
+export async function parse() {
     console.log('csv parse')
 
-    let lineReader = readline.createInterface({
-        input: fs.createReadStream(INPUT_FILE)
-    });
+    const data = await fs.readFile(INPUT_FILE, 'utf-8')
+    const lines = data.split('\n')
+    return processLines(lines)
+}
 
-    let reachHeader = false
+function processLines(lines) {
     let result = []
-    lineReader.on('line', function (line) {
+    let reachHeader = false
+    lines.forEach(line => {
         if (reachHeader) {
-            let s = line.split(",")
-            let t = new Transaction(
-                s[0],
+            if (line.length === 0) {
+                return
+            }
+            let columns = line.split(",")
+            let transaction = new Transaction(
+                columns[0],
                 "人民币",
-                s[5],
-                s[1],
+                columns[5],
+                columns[1],
                 'wechat',
-                s[2]
+                columns[2]
             )
-            console.log(t)
-            // TODO: 2021/12/9 (duanyufei) async function
-            result.push(t)
+            result.push(transaction)
         } else if (line.startsWith(HEADER[0])) {
             reachHeader = true
         }
-    });
+    })
+    return result
 }

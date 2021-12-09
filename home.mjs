@@ -3,4 +3,5 @@ import {parse} from "./csvparser.mjs";
 
 console.log(name)
 console.log(sampleFun())
-parse()
+let r = await parse()
+console.log(r)
