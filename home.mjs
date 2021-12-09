@@ -1,7 +1,13 @@
-import {name, sampleFun} from "./modules/sample.mjs";
-import {parse} from "./csvparser.mjs";
+import {parseCsv} from "./csvparser.mjs";
+import {parsePdf} from "./pdfparser.mjs"
 
-console.log(name)
-console.log(sampleFun())
-let r = await parse()
-console.log(r)
+const WECHAT_FILE = './sample/wc.csv'
+
+// const CMB_FILE = "./sample/bank_test.pdf"
+const CMB_FILE = "./sample/cmb.pdf"
+
+let wechat = await parseCsv(WECHAT_FILE);
+console.log(wechat)
+
+let cmb = await parsePdf(CMB_FILE)
+console.log(cmb)

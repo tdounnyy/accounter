@@ -1,53 +1,46 @@
-// TODO: 2021/12/7 (duanyufei) 输入参数化
-// TODO: 2021/12/7 (duanyufei) 输出结果
-// TODO: 2021/12/7 (duanyufei) class 公共化
-// TODO: 2021/12/7 (duanyufei) 异步输出
 // TODO: 2021/12/7 (duanyufei) 模板化
 
-const fs = require("fs");
-const moment = require("moment");
+import fs from 'fs'
+import moment from 'moment'
+import PDFParser from 'pdf2json'
+
 const OUTPUT_TMP = false
 const HEADER_ENDING = 'Counter Party'
-// const TARGET_FILE = "./sample/bank_test.pdf"
-const TARGET_FILE = "./sample/cmb.pdf"
 
-exports.parse = function () {
-    console.log('start')
-    const fs = require('fs'),
-        PDFParser = require("pdf2json");
-
-    const pdfParser = new PDFParser();
-
-    pdfParser.on("pdfParser_dataError", errData => console.error(errData.parserError));
-    pdfParser.on("pdfParser_dataReady", pdfData => {
-        if (OUTPUT_TMP) {
-            var result = JSON.stringify(pdfData, null, 2);
-            result = decodeURIComponent(result)
-            fs.writeFile('./sample/tmp.json', result.toString(), callback => {
+export async function parsePdf(pdfFile) {
+    return new Promise((resolve, reject) => {
+        const pdfParser = new PDFParser();
+        pdfParser.on("pdfParser_dataError", errData => {
+            console.error(errData.parserError)
+            reject(errData)
+        });
+        pdfParser.on("pdfParser_dataReady", pdfData => {
+            if (OUTPUT_TMP) {
+                var result = JSON.stringify(pdfData, null, 2);
+                result = decodeURIComponent(result)
+                fs.writeFile('./sample/tmp.json', result.toString(), callback => {
+                })
+            }
+            let extracted = extract(pdfData)
+            fs.writeFile('./sample/result.json', extracted.join('\n'), callback => {
             })
-        }
-        let extracted = extract(pdfData)
-        console.log(extracted);
-        fs.writeFile('./sample/result.json', extracted.join('\n'), callback => {
-        })
 
-        groupByTransaction(extracted)
-    });
-    pdfParser.loadPDF(TARGET_FILE)
+            resolve(groupByTransaction(extracted))
+        });
+        pdfParser.loadPDF(pdfFile)
+    })
 }
 
-function extract(raw) {
+function extract(json) {
     let afterCounterParty = false;
-    let pages = raw['Pages']
+    let pages = json['Pages']
     const texts = []
     pages.forEach(e => {
-        // console.log(e['Texts'])
         e['Texts'].forEach(i => {
             let target = i['R'][0]['T']
             let result = decodeURIComponent(target)
             if (afterCounterParty) {
                 texts.push(result)
-                console.log(result)
             } else if (result == HEADER_ENDING) {
                 afterCounterParty = true // 表示 Header 部分结束, 明细部分开始
             }
@@ -83,5 +76,5 @@ function groupByTransaction(list) {
             return acc
         }, []
     )
-    console.log(result)
+    return result
 }

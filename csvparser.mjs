@@ -1,8 +1,6 @@
 import {Transaction} from "./classes.mjs"
 import {promises as fs} from 'fs'
 
-const INPUT_FILE = './sample/wc.csv'
-
 let HEADER = [
     "交易时间",
     "交易类型",
@@ -17,10 +15,10 @@ let HEADER = [
     "备注"
 ]
 
-export async function parse() {
+export async function parseCsv(csvFile) {
     console.log('csv parse')
 
-    const data = await fs.readFile(INPUT_FILE, 'utf-8')
+    const data = await fs.readFile(csvFile, 'utf-8')
     const lines = data.split('\n')
     return processLines(lines)
 }
