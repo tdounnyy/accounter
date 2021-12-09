@@ -36,7 +36,7 @@ function processLines(lines) {
                 columns[0],
                 "人民币",
                 columns[5],
-                columns[1],
+                '-0.00',
                 'wechat',
                 columns[2]
             )

@@ -3,6 +3,7 @@
 import fs from 'fs'
 import moment from 'moment'
 import PDFParser from 'pdf2json'
+import {Transaction} from "./classes.mjs"
 
 const OUTPUT_TMP = false
 const HEADER_ENDING = 'Counter Party'
@@ -67,7 +68,7 @@ function extract(json) {
 }
 
 function groupByTransaction(list) {
-    let result = list.reduce((acc, current) => {
+    return list.reduce((acc, current) => {
             if (moment(current, "YYYY-MM-DD", true).isValid()) {
                 acc.push([current])
             } else {
@@ -75,6 +76,5 @@ function groupByTransaction(list) {
             }
             return acc
         }, []
-    )
-    return result
+    ).map(it => new Transaction(it[0], it[1], it[2], it[3], it[4], `${it[5]}#${it[6]}`))
 }

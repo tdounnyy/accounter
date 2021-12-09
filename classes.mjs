@@ -9,14 +9,15 @@ export class Transaction {
     ts
     currency
     amount
-    note
+    balance
     fromAccountId
     toAccountId
-    constructor(ts, currency, amount,note,fromAccountId,toAccountId) {
+
+    constructor(ts, currency, amount, balance, fromAccountId, toAccountId) {
         this.ts = ts
         this.currency = currency
         this.amount = amount
-        this.note = note
+        this.balance = balance
         this.fromAccountId = fromAccountId
         this.toAccountId = toAccountId
     }
