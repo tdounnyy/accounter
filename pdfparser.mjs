@@ -19,12 +19,10 @@ export async function parsePdf(pdfFile) {
             if (OUTPUT_TMP) {
                 var result = JSON.stringify(pdfData, null, 2);
                 result = decodeURIComponent(result)
-                fs.writeFile('./sample/tmp.json', result.toString(), callback => {
+                fs.writeFile('./sample/tmp_cmb.json', result.toString(), callback => {
                 })
             }
             let extracted = extract(pdfData)
-            fs.writeFile('./sample/result.json', extracted.join('\n'), callback => {
-            })
 
             resolve(groupByTransaction(extracted))
         });
