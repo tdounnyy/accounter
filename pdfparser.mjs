@@ -76,5 +76,13 @@ function groupByTransaction(list) {
             }
             return acc
         }, []
-    ).map(it => new Transaction(it[0], it[1], it[2], it[3], it[4], `${it[5]}#${it[6]}`))
+    ).map(it => {
+            if (it[6] !== undefined) {
+                it[5] = it[5] + "#" + it[6]
+                return it
+            } else {
+                return it
+            }
+        }
+    ).map(it => new Transaction(it[0], it[1], it[2], it[3], it[4], it[5]))
 }
